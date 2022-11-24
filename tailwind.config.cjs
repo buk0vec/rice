@@ -8,7 +8,7 @@ const config = {
 		extend: {}
 	},
 
-	plugins: [require('@brainandbones/skeleton/tailwind/theme.cjs')]
+	plugins: [require('@brainandbones/skeleton/tailwind/theme.cjs'), require('@tailwindcss/forms')]
 };
 
 module.exports = config;

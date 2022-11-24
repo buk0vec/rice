@@ -7,6 +7,7 @@
 	import { onMount } from 'svelte';
 	import { supabaseClient } from '$lib/db';
 	import { invalidate } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	onMount(() => {
 		const {
@@ -21,7 +22,9 @@
 	});
 </script>
 
-<AppShell>
+<AppShell
+	slotSidebarLeft={$page.url.pathname.startsWith('/app') ? 'bg-surface-500/5 w-56 p-4' : undefined}
+>
 	<!-- Header -->
 	<svelte:fragment slot="header"
 		><AppBar>
@@ -38,6 +41,17 @@
 			</svelte:fragment>
 		</AppBar></svelte:fragment
 	>
+	<svelte:fragment slot="sidebarLeft"
+		>{#if $page.url.pathname.startsWith('/app')}
+			<nav class="list-nav">
+				<ul>
+					<li><a href="/app">Home</a></li>
+				</ul>
+			</nav>
+		{/if}</svelte:fragment
+	>
+
 	<!-- Page Content Slot -->
+
 	<slot />
 </AppShell>

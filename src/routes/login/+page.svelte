@@ -1,5 +1,5 @@
 <div class="flex flex-col items-center">
-	<h1 class="font-semibold text-7xl text-center p-4">Create Account</h1>
+	<h1 class="font-semibold text-7xl text-center p-4">Sign in</h1>
 	<form>
 		<label for="email" class="mb-4"
 			>Email
@@ -9,13 +9,11 @@
 			>Password
 			<input type="password" name="password" placeholder="••••••" />
 		</label>
-		<label for="name" class="mb-4"
-			>Display name
-			<input type="text" name="name" placeholder="Rice enthousiast" />
-		</label>
 	</form>
 	<div class="flex flex-row gap-4">
 		<a class="btn btn-filled-surface w-min" href="/">Back</a>
-		<a class="btn btn-filled-primary w-min" href="/app">Create</a>
+		<a class="btn btn-filled-primary w-min" href="/app">Login</a>
 	</div>
+	<div class="p-2">or</div>
+	<a class="btn btn-filled-primary w-min" href="/signup">Create account</a>
 </div>

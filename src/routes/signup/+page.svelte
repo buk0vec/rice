@@ -1,5 +1,13 @@
 <script lang="ts">
 	import type { ActionData } from './$types';
+	import { page } from '$app/stores';
+	import { afterNavigate } from '$app/navigation';
+
+	let previousPage: string = '/';
+
+	afterNavigate(({ from }) => {
+		previousPage = from?.url.pathname || previousPage;
+	});
 
 	export let form: ActionData;
 </script>
@@ -40,7 +48,7 @@
 			/>
 		</label>
 		<div class="flex flex-row gap-4 justify-center">
-			<a class="btn btn-filled-surface w-min" href="/">Back</a>
+			<a class="btn btn-filled-surface w-min" href={previousPage}>Back</a>
 			<button class="btn btn-filled-primary w-min">Create</button>
 		</div>
 	</form>

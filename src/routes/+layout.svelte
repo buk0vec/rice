@@ -4,6 +4,21 @@
 	import '../app.postcss';
 
 	import { AppShell, AppBar } from '@brainandbones/skeleton';
+	import { onMount } from 'svelte';
+	import { supabaseClient } from '$lib/db';
+	import { invalidate } from '$app/navigation';
+
+	onMount(() => {
+		const {
+			data: { subscription }
+		} = supabaseClient.auth.onAuthStateChange(() => {
+			invalidate('supabase:auth');
+		});
+
+		return () => {
+			subscription.unsubscribe();
+		};
+	});
 </script>
 
 <AppShell>

@@ -10,5 +10,7 @@
 		<h1>Welcome {$page.data.session.user.email}</h1>
 		<p>I am logged in!</p>
 	{/if}
-	<a class="btn btn-filled-primary w-min" href="/">Sign out</a>
+	<form method="POST" action="?/signout">
+		<button class="btn btn-filled-primary w-min">Sign out</button>
+	</form>
 </div>

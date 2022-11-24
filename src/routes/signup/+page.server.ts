@@ -19,6 +19,7 @@ export const actions: Actions = {
     if (!name) {
 			return invalid(400, { email, name, nameMissing: true });
 		}
+    // TODO: Flip email verification back on
     const { data, error } = await adminClient.auth.admin.createUser({
       email,
       password,

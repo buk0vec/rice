@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { supabaseClient } from '$lib/db';
 
-	let profile = { name: '' };
+	let profile = { name: null };
 
 	const loadProfile = async () => {
 		const { data, error } = await supabaseClient
@@ -19,9 +19,15 @@
 	}
 </script>
 
-<div class="flex flex-col p-4">
-	<h1 class="font-semibold text-7xl pb-4">Rice</h1>
-	<form method="POST" action="?/signout">
-		<button class="btn btn-filled-primary w-min">Sign out</button>
-	</form>
-</div>
+<nav class="list-nav">
+	<ul>
+		<li>
+			<span class="w-auto h px-4 py-3 inline text-2xl">
+				Hi, {#if profile.name == null}<div class="placeholder w-16 animate-pulse" />{:else}
+					<span class="font-semibold">{profile.name}</span>
+				{/if}
+			</span>
+		</li>
+		<li><a href="/app">Home</a></li>
+	</ul>
+</nav>

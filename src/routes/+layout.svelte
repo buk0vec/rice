@@ -8,6 +8,7 @@
 	import { supabaseClient } from '$lib/db';
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
+	import Sidebar from '$lib/sidebar.svelte';
 
 	onMount(() => {
 		const {
@@ -43,11 +44,7 @@
 	>
 	<svelte:fragment slot="sidebarLeft"
 		>{#if $page.url.pathname.startsWith('/app')}
-			<nav class="list-nav">
-				<ul>
-					<li><a href="/app">Home</a></li>
-				</ul>
-			</nav>
+			<Sidebar />
 		{/if}</svelte:fragment
 	>
 

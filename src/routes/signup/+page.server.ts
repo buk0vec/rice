@@ -24,7 +24,8 @@ export const actions: Actions = {
       password,
       user_metadata: {
         name
-      }
+      },
+      email_confirm: true
     })
     // console.log(data)
     // console.log(error)

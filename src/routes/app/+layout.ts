@@ -7,7 +7,8 @@ export const load: LayoutLoad = async (event) => {
   user_id,
   id,
   group_id (
-    name
+    name,
+    id
   )
   `)
   event.depends("rice:members")

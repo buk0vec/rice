@@ -4,8 +4,9 @@
 	import { createGroup } from '$lib/groups';
 	import { addToGroup } from '$lib/members';
 	import type { PageData } from './$types';
-	import { modalStore, type ModalSettings } from '@brainandbones/skeleton';
+	import { modalStore, type ModalComponent, type ModalSettings } from '@brainandbones/skeleton';
 	import { invalidate } from '$app/navigation';
+	import NewGroupModal from './newgroup.svelte';
 
 	let profile = { name: '' };
 
@@ -22,21 +23,14 @@
 	};
 
 	function triggerPrompt(): void {
-		const prompt: ModalSettings = {
-			type: 'prompt',
-			title: 'Create Kitchen',
-			body: 'Please enter the name of your new kitchen',
-			value: '',
-			response: async (r: string) => {
-				// TODO: block empty names
-				const gcres = await createGroup(r);
-				if (gcres) {
-					const gares = await addToGroup($page.data.session?.user.id ?? 'NULL', gcres.id ?? 'NULL');
-					invalidate('rice:members');
-				}
-			}
+		const c: ModalComponent = {
+			ref: NewGroupModal
 		};
-		modalStore.trigger(prompt);
+		const d: ModalSettings = {
+			type: 'component',
+			component: c
+		};
+		modalStore.trigger(d);
 	}
 
 	$: if ($page.data.session) {

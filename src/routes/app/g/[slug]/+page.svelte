@@ -1,13 +1,24 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import { modalStore, type ModalComponent, type ModalSettings } from '@brainandbones/skeleton';
+	import RemoveGroupModal from './RemoveGroupModal.svelte';
+
+	function triggerPrompt(): void {
+		const c: ModalComponent = {
+			ref: RemoveGroupModal
+		};
+		const d: ModalSettings = {
+			type: 'component',
+			component: c
+		};
+		modalStore.trigger(d);
+	}
+
 	export let data: PageData;
-	// TODO: Handle
 </script>
 
-<div class="flex flex-col p-4">
-	<h1 class="font-semibold text-7xl pb-4">{data.name}</h1>
+<div class="flex flex-col p-4 gap-4">
+	<h1 class="font-semibold text-7xl">{data.name}</h1>
 	<a class="btn btn-filled-primary w-24" href="/app">Back</a>
-	<form class="pt-4" method="POST" action="?/leave">
-		<button class="btn btn-filled-warning">Leave</button>
-	</form>
+	<button class="btn btn-filled-warning w-24" on:click={triggerPrompt}>Leave</button>
 </div>

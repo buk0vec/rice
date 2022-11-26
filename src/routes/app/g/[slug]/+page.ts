@@ -9,19 +9,23 @@ export const load: PageLoad = async (event) => {
     // Worst case fallback, shouldn't happen
     const { data, error } = await supabaseClient.from('groups').select('name').eq('id', event.params.slug)
     if (error) {
-      return { name: undefined}
+      return { name: undefined, id: undefined}
     }
-    return { name: data[0].name }
+    // TODO: Remove this fallback by just performing a refetch
+    return { name: data[0].name, id: undefined }
   }
-  const group = members.find(m => 
+  
+  const membership = members.find(m => 
     (Array.isArray(m.group_id) ? m.group_id[0].id.toString() : m.group_id?.id.toString()) === event.params.slug
-  )?.group_id
+  )
 
-  if (!group) {
-    return {name: undefined }
+  const group = membership?.group_id
+
+  if (!membership || !group) {
+    return {name: undefined, id: undefined }
   }
 
   const { name } = Array.isArray(group) ? group[0] : group;
 
-  return { name }
+  return { name, id: membership.id }
 }

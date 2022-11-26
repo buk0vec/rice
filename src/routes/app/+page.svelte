@@ -1,26 +1,8 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { supabaseClient } from '$lib/db';
-	import { createGroup } from '$lib/groups';
-	import { addToGroup } from '$lib/members';
 	import type { PageData } from './$types';
 	import { modalStore, type ModalComponent, type ModalSettings } from '@brainandbones/skeleton';
-	import { invalidate } from '$app/navigation';
-	import NewGroupModal from './newgroup.svelte';
-
-	let profile = { name: '' };
-
+	import NewGroupModal from './NewGroupModal.svelte';
 	export let data: PageData;
-
-	const loadProfile = async () => {
-		const { data, error } = await supabaseClient
-			.from('profiles')
-			.select('*')
-			.eq('id', $page.data.session?.user.id);
-		console.log(data);
-		console.log(error);
-		profile = (data ?? [{ name: '' }])[0];
-	};
 
 	function triggerPrompt(): void {
 		const c: ModalComponent = {
@@ -31,10 +13,6 @@
 			component: c
 		};
 		modalStore.trigger(d);
-	}
-
-	$: if ($page.data.session) {
-		loadProfile();
 	}
 </script>
 

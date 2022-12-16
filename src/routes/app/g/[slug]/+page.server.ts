@@ -8,11 +8,12 @@ export const actions: Actions = {
     if (!session) {
       return invalid(403, {noSession: true})
     }
-    const { data, error } = await supabaseClient.from("members").delete().eq('user_id', session.user.id).eq('group_id', event.params.slug)
+    const { error } = await supabaseClient.from("members").delete().eq('user_id', session.user.id).eq('group_id', event.params.slug)
     if (error) {
       // TODO: Handle error possibilities
       return invalid(503, {isa: true})
     }
+    // supabaseClient.removeChannel(`public:groups:id=eq.${event.params.slug}`)
     throw redirect(303, '/app')
   },
 };

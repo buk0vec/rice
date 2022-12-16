@@ -26,7 +26,7 @@
 <Modal />
 
 <AppShell
-	slotSidebarLeft={$page.url.pathname.startsWith('/app') ? 'bg-surface-500/5 w-56 p-4' : undefined}
+	slotSidebarLeft={$page.url.pathname.startsWith('/app') ? 'bg-surface-500/5 w-56 p-4 hidden sm:inline-block' : undefined}
 >
 	<!-- Header -->
 	<svelte:fragment slot="header"

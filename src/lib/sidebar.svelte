@@ -9,8 +9,6 @@
 			.from('profiles')
 			.select('*')
 			.eq('id', $page.data.session?.user.id);
-		console.log(data);
-		console.log(error);
 		profile = (data ?? [{ name: '' }])[0];
 	};
 

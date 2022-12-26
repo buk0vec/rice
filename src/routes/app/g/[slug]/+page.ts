@@ -27,8 +27,37 @@ export const load: PageLoad = async (event) => {
 					filter: `id=eq.${event.params.slug}`
 				},
 				(payload) => {
-					// console.log('STORE: NEW VALUE');
-					// console.log(payload.new);
+					set(payload.new);
+				}
+			)
+			.subscribe();
+		return async () => {await supabaseClient.removeChannel(channel)};
+	});
+
+  const [ievents, ieventserror] = await (async () => {
+		const { data, error } = await supabaseClient
+			.from('events')
+			.select('*')
+			.eq('group_id', event.params.slug);
+		return [data, error];
+	})();
+
+  if (ieventserror || !ievents) {
+		return {};
+	}
+
+	const eventStore = readable<any>(ievents, (set) => {
+		const channel = supabaseClient
+			.channel(`public:events:group_id=eq.${event.params.slug}`)
+			.on(
+				'postgres_changes',
+				{
+					event: 'UPDATE',
+					schema: 'public',
+					table: 'events',
+					filter: `group_id=eq.${event.params.slug}`
+				},
+				(payload) => {
 					set(payload.new);
 				}
 			)
@@ -61,5 +90,5 @@ export const load: PageLoad = async (event) => {
 	}
 	const { name } = Array.isArray(group) ? group[0] : group;
 
-	return { name, id: membership.id, store, slug: event.params.slug };
+	return { name, id: membership.id, store, eventStore, slug: event.params.slug };
 };

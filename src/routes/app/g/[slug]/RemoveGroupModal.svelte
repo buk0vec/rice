@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { addToGroup } from '$lib/members';
-	import { page } from '$app/stores';
-
 	// Props
 	/** Exposes parent props to this component. */
 	export let parent: any;

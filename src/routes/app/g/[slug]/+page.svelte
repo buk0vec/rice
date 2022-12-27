@@ -3,13 +3,6 @@
 	import { modalStore, type ModalComponent, type ModalSettings } from '@brainandbones/skeleton';
 	import RemoveGroupModal from './RemoveGroupModal.svelte';
 	import EventCard from './EventCard.svelte';
-	import type { Readable } from 'svelte/store';
-
-	let store: Readable<any>;
-
-	let eventStore: Readable<any[]>;
-
-	let events: any[];
 
 	export let data: PageData;
 
@@ -24,9 +17,21 @@
 		modalStore.trigger(d);
 	}
 
-	$: if (data.store) {
-		store = data.store;
+	let events: any[] = [];
+
+	$: if (data.events) {
+		console.log('Overwriting');
+		events = [...data.events].sort((a, b) => sortEvents(a, b));
 	}
+
+	data.eventStore?.subscribe((value) => {
+		if (value && value.eventType === 'INSERT') {
+			events = [value.new, ...events];
+			events.sort((a, b) => sortEvents(a, b));
+		}
+	});
+
+	console.log(data);
 
 	const sortEvents = (a: any, b: any) => {
 		const aea = new Date(a.expires_at);
@@ -41,19 +46,13 @@
 		}
 		return new Date(a.expires_at) > new Date(b.expires_at) ? 1 : -1;
 	};
-
-	$: if (data.eventStore) {
-		eventStore = data.eventStore;
-		events = $eventStore.sort((a, b) => sortEvents(a, b));
-	}
 </script>
 
 <div class="flex flex-col p-4 gap-4">
 	<h1 class="font-semibold text-7xl">{data.name}</h1>
-	<h3>{$store.events.toString()}</h3>
-	<a class="btn btn-filled-primary w-24" href={'/app/new?gid=' + $store.id}>Make rice</a>
+	<a class="btn btn-filled-primary w-24" href={'/app/new?gid=' + data.group_id}>Make rice</a>
 	<a class="btn btn-filled-primary w-24" href="/app">Back</a>
-	{#each events as event}
+	{#each events as event (event.id)}
 		<EventCard {event} />
 	{/each}
 	<button class="btn btn-filled-warning w-24" on:click={triggerPrompt}>Leave</button>

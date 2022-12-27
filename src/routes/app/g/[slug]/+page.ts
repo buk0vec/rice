@@ -4,37 +4,8 @@ import type { PageLoad } from './$types';
 
 export const load: PageLoad = async (event) => {
 	const { supabaseClient } = await getSupabase(event);
-	const [initial, initialError] = await (async () => {
-		const { data, error } = await supabaseClient
-			.from('groups')
-			.select('*')
-			.eq('id', event.params.slug);
-		return [data, error];
-	})();
-	// TODO: handle this error. probably with a server-side check to make sure this exists.
-	if (initialError || !initial) {
-		return {};
-	}
-	const store = readable<any>(initial[0], (set) => {
-		const channel = supabaseClient
-			.channel(`public:groups:id=eq.${event.params.slug}`)
-			.on(
-				'postgres_changes',
-				{
-					event: 'UPDATE',
-					schema: 'public',
-					table: 'groups',
-					filter: `id=eq.${event.params.slug}`
-				},
-				(payload) => {
-					set(payload.new);
-				}
-			)
-			.subscribe();
-		return async () => {await supabaseClient.removeChannel(channel)};
-	});
-
-  const [ievents, ieventserror] = await (async () => {
+  // Get the events for the group
+  const [events, eventsError] = await (async () => {
 		const { data, error } = await supabaseClient
 			.from('events')
 			.select('*')
@@ -42,28 +13,34 @@ export const load: PageLoad = async (event) => {
 		return [data, error];
 	})();
 
-  if (ieventserror || !ievents) {
+  if (eventsError || events === null) {
 		return {};
 	}
 
-	const eventStore = readable<any>(ievents, (set) => {
-		const channel = supabaseClient
-			.channel(`public:events:group_id=eq.${event.params.slug}`)
-			.on(
-				'postgres_changes',
-				{
-					event: 'UPDATE',
-					schema: 'public',
-					table: 'events',
-					filter: `group_id=eq.${event.params.slug}`
-				},
-				(payload) => {
-					set(payload.new);
-				}
-			)
-			.subscribe();
-		return async () => {await supabaseClient.removeChannel(channel)};
-	});
+  // TODO: type the store
+  // Create a subscription for changes to events
+  const eventStore = readable<any>(null, (set) => {
+    const channel = supabaseClient
+    .channel(`public:events:group_id=eq.${event.params.slug}`)
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'events',
+        filter: `group_id=eq.${event.params.slug}`
+      },
+      (payload) => {
+        console.log('new event get!');
+        console.log(payload);
+        set(payload)
+      }
+    )
+    .subscribe();
+    return async () => {
+      return async () => {await supabaseClient.removeChannel(channel)};
+    }
+  })
 
 	// Make sure that awaiting parent is the last async request possible
 	const { members } = await event.parent();
@@ -71,7 +48,7 @@ export const load: PageLoad = async (event) => {
 		// Worst case fallback, shouldn't happen
 		const { data, error } = await supabaseClient
 			.from('groups')
-			.select('name')
+			.select('*')
 			.eq('id', event.params.slug);
 		if (error) {
 			return { name: undefined, id: undefined };
@@ -79,16 +56,19 @@ export const load: PageLoad = async (event) => {
 		// TODO: Remove this fallback by just performing a refetch
 		return { name: data[0].name, id: undefined };
 	}
+
+  // Pull group information from parent request
 	const membership = members.find(
 		(m) =>
 			(Array.isArray(m.group_id) ? m.group_id[0].id.toString() : m.group_id?.id.toString()) ===
 			event.params.slug
 	);
+
 	const group = membership?.group_id;
 	if (!membership || !group) {
 		return { name: undefined, id: undefined };
 	}
-	const { name } = Array.isArray(group) ? group[0] : group;
+	const { name, id } = Array.isArray(group) ? group[0] : group;
 
-	return { name, id: membership.id, store, eventStore, slug: event.params.slug };
+	return { name, group_id: id, events, slug: event.params.slug, eventStore };
 };

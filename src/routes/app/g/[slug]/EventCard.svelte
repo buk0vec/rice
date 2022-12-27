@@ -52,10 +52,17 @@
 		displayTime = '00:00';
 		bg = '';
 	}
+
+	let toggled = false;
 </script>
 
 <div class={`card p-4 ${bg}`}>
-	<p>Cooked by {event.owner}</p>
-	<p>Cooking in {displayTime}</p>
-	<p>Created at: {moment(event.created_at).toLocaleString()}</p>
+	<div class="flex flex-row justify-between">
+		<p>Cooking in {displayTime}</p>
+		<button on:click={() => (toggled = !toggled)}>{toggled ? '▼' : '▲'}</button>
+	</div>
+	{#if toggled}
+		<p>Cooked by {event.owner}</p>
+		<p>Created at: {moment(event.created_at).toLocaleString()}</p>
+	{/if}
 </div>

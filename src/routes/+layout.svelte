@@ -1,9 +1,9 @@
 <script lang="ts">
 	import '../theme.postcss';
-	import '@brainandbones/skeleton/styles/all.css';
+	import '@skeletonlabs/skeleton/styles/all.css';
 	import '../app.postcss';
 
-	import { AppShell, AppBar, Modal } from '@brainandbones/skeleton';
+	import { AppShell, AppBar, Modal } from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
 	import { supabaseClient } from '$lib/db';
 	import { invalidate } from '$app/navigation';
@@ -26,7 +26,9 @@
 <Modal />
 
 <AppShell
-	slotSidebarLeft={$page.url.pathname.startsWith('/app') ? 'bg-surface-500/5 w-56 p-4 hidden sm:inline-block' : undefined}
+	slotSidebarLeft={$page.url.pathname.startsWith('/app')
+		? 'bg-surface-500/5 w-56 p-4 hidden sm:inline-block'
+		: undefined}
 >
 	<!-- Header -->
 	<svelte:fragment slot="header"

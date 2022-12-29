@@ -8,7 +8,7 @@
 	export let parent: any;
 
 	// Stores
-	import { modalStore } from '@brainandbones/skeleton';
+	import { modalStore } from '@skeletonlabs/skeleton';
 	import { invalidate } from '$app/navigation';
 
 	// Form Data

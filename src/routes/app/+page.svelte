@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { modalStore, type ModalComponent, type ModalSettings } from '@brainandbones/skeleton';
+	import { modalStore, type ModalComponent, type ModalSettings } from '@skeletonlabs/skeleton';
 	import NewGroupModal from './NewGroupModal.svelte';
 	export let data: PageData;
 

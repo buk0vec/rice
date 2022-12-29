@@ -12,7 +12,7 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@brainandbones/skeleton": "^0.76.0",
+		"@skeletonlabs/skeleton": "^0.86.9",
 		"@sveltejs/adapter-auto": "^1.0.0-next.91",
 		"@sveltejs/kit": "^1.0.0-next.589",
 		"@tailwindcss/forms": "^0.5.3",

@@ -2,11 +2,6 @@
 # yarn lockfile v1
 
 
-"@brainandbones/skeleton@^0.76.0":
-  version "0.76.0"
-  resolved "https://registry.yarnpkg.com/@brainandbones/skeleton/-/skeleton-0.76.0.tgz#3b4a435ac519a224b632f32c6a5296ffcdb60d5f"
-  integrity sha512-FqJ4OgzTTnvlFmz8xS7z/zegCLJrTkcp+b0cmBh2Pt2RkdnA3OPrehg/44ML3UjCZLNB4+qetBbVe1CbNcHVLw==
-
 "@esbuild/android-arm64@0.16.12":
   version "0.16.12"
   resolved "https://registry.yarnpkg.com/@esbuild/android-arm64/-/android-arm64-0.16.12.tgz#86c4fdd7c0d65fe9dcbe138fbe72720658ec3b88"
@@ -194,6 +189,11 @@
   version "1.0.0-next.21"
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
+
+"@skeletonlabs/skeleton@^0.86.9":
+  version "0.86.9"
+  resolved "https://registry.yarnpkg.com/@skeletonlabs/skeleton/-/skeleton-0.86.9.tgz#1e2233b0abb31db4eaa6d14a689c27e7cc3a3286"
+  integrity sha512-4SvdJjId++HeHq2GrcSMs34Bju4T0xUOXyiJTpZT7mip9Gfp8KYQAWfKvj3u0ug7jYYuSniigJD7eXa452wmaQ==
 
 "@supabase/auth-helpers-shared@0.2.3":
   version "0.2.3"

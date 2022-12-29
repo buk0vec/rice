@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { modalStore, type ModalComponent, type ModalSettings } from '@brainandbones/skeleton';
+	import { modalStore, type ModalComponent, type ModalSettings } from '@skeletonlabs/skeleton';
 	import RemoveGroupModal from './RemoveGroupModal.svelte';
 	import EventCard from './EventCard.svelte';
 	import { browser } from '$app/environment';

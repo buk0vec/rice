@@ -42,6 +42,39 @@ export const load: PageLoad = async (event) => {
     }
   })
 
+  // Get the initial responses for the group
+  const [responses, responsesError] = await (async () => {
+    const { data, error } = await supabaseClient.from('responses').select('*').in('event_id', events.map(e => e.id))
+    return [data, error]
+  })()
+
+  // TODO: Handle what happens when there's an error/RLS issue
+  if (responsesError || responses === null) {
+    return {}
+  }
+
+  const responsesWatcher = readable<any>(null, (set) => {
+    const channel = supabaseClient
+    .channel('public:responses')
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'responses',
+      },
+      (payload) => {
+        console.log('new response get!');
+        console.log(payload);
+        set(payload)
+      }
+    )
+    .subscribe();
+    return async () => {
+      return async () => {await supabaseClient.removeChannel(channel)};
+    }
+  })
+
 	// Make sure that awaiting parent is the last async request possible
 	const { members } = await event.parent();
 	if (!members) {
@@ -70,5 +103,5 @@ export const load: PageLoad = async (event) => {
 	}
 	const { name, id } = Array.isArray(group) ? group[0] : group;
 
-	return { name, group_id: id, events, slug: event.params.slug, eventStore };
+	return { name, group_id: id, events, slug: event.params.slug, eventStore, responses, responsesWatcher };
 };

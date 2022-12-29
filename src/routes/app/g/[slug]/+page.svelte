@@ -3,10 +3,11 @@
 	import { modalStore, type ModalComponent, type ModalSettings } from '@brainandbones/skeleton';
 	import RemoveGroupModal from './RemoveGroupModal.svelte';
 	import EventCard from './EventCard.svelte';
+	import { browser } from '$app/environment';
 
 	export let data: PageData;
 
-	function triggerPrompt(): void {
+	function triggerLeavePrompt(): void {
 		const c: ModalComponent = {
 			ref: RemoveGroupModal
 		};
@@ -14,14 +15,22 @@
 			type: 'component',
 			component: c
 		};
-		modalStore.trigger(d);
+		if (browser) {
+			modalStore.trigger(d);
+		}
 	}
 
 	let events: any[] = [];
 
+	let responses: any[] = [];
+
 	$: if (data.events) {
-		console.log('Overwriting');
 		events = [...data.events].sort((a, b) => sortEvents(a, b));
+	}
+
+	$: if (data.responses) {
+		responses = [...data.responses];
+		console.log('Responses: ', responses);
 	}
 
 	data.eventStore?.subscribe((value) => {
@@ -30,8 +39,6 @@
 			events.sort((a, b) => sortEvents(a, b));
 		}
 	});
-
-	console.log(data);
 
 	const sortEvents = (a: any, b: any) => {
 		const aea = new Date(a.expires_at);
@@ -53,7 +60,7 @@
 	<a class="btn btn-filled-primary w-24" href={'/app/new?gid=' + data.group_id}>Make rice</a>
 	<a class="btn btn-filled-primary w-24" href="/app">Back</a>
 	{#each events as event (event.id)}
-		<EventCard {event} />
+		<EventCard {event} responses={responses.filter((r) => r.event_id === event.id)} />
 	{/each}
-	<button class="btn btn-filled-warning w-24" on:click={triggerPrompt}>Leave</button>
+	<button class="btn btn-filled-warning w-24" on:click={triggerLeavePrompt}>Leave</button>
 </div>

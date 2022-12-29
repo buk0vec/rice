@@ -1,6 +1,6 @@
 import type { Actions } from './$types';
 import { supabaseClient as adminClient } from '$lib/server/db';
-import { invalid, error as skerror, redirect } from '@sveltejs/kit';
+import { fail, error as skerror, redirect } from '@sveltejs/kit';
 
 export const actions: Actions = {
 	createUser: async ({ request }) => {
@@ -10,14 +10,14 @@ export const actions: Actions = {
 		const name = fd.get('name') as string;
 		// TODO: Validate user information
 		if (!email) {
-			return invalid(400, { email, name, emailMissing: true });
+			return fail(400, { email, name, emailMissing: true });
 		}
 		// TODO: Validate password requirements
 		if (!password) {
-			return invalid(400, { email, name, passwordMissing: true });
+			return fail(400, { email, name, passwordMissing: true });
 		}
 		if (!name) {
-			return invalid(400, { email, name, nameMissing: true });
+			return fail(400, { email, name, nameMissing: true });
 		}
 		// TODO: Flip email verification back on
 		const { data, error } = await adminClient.auth.admin.createUser({

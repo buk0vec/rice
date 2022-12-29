@@ -1,5 +1,5 @@
 import type { Actions } from './$types';
-import { invalid, redirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import moment from 'moment';
 
@@ -14,7 +14,7 @@ export const actions: Actions = {
 		}
 		// TODO: Properly validate kid and minutes. This is lame for now.
 		if (!kid || !minutes) {
-			return invalid(400, { gid: kid, nulls: true });
+			return fail(400, { gid: kid, nulls: true });
 		}
 		const { data, error } = await supabaseClient
 			.from('events')
